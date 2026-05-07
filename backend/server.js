@@ -8,6 +8,7 @@ const { seedAdminUser } = require("./controllers/authController");
 const authRoutes = require("./routes/authRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const noteRoutes = require("./routes/noteRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 dotenv.config();
 
@@ -37,6 +38,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/notes", noteRoutes);
+app.use("/api/chat", chatRoutes);
+
 
 app.use((req, res) => {
   res.status(404).json({
