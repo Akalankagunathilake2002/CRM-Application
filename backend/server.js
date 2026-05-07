@@ -18,9 +18,31 @@ connectDB().then(() => {
   seedAdminUser();
 });
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://crm-frontend-five-snowy.vercel.app",
+  "https://crm-frontend-3ttbncjro-akalankas-projects-6bdc26c7.vercel.app",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: function (origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const isAllowedOrigin = allowedOrigins.includes(origin);
+
+      const isVercelFrontendPreview =
+        origin.includes("crm-frontend") && origin.endsWith(".vercel.app");
+
+      if (isAllowedOrigin || isVercelFrontendPreview) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
